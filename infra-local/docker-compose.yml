@@ -13,7 +13,7 @@ services:
     expose:
       - '3306'
     volumes:
-      #      comando para armazenar os dados persistidos
-      - ./init/db:/var/lib/mysql/init
+#      #      comando para armazenar os dados persistidos
+#      - ../init/db:/var/lib/mysql/init
       #      comando para criar as tabelas via SQL
-      - ./init:/docker-entrypoint-initdb.d
+      - ../init:/docker-entrypoint-initdb.d

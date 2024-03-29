@@ -1,18 +1,16 @@
-CREATE TABLE logo (
-    id INT PRIMARY KEY,
+CREATE TABLE tb_logo (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     imagem_url VARCHAR(255)
 );
 
-CREATE TABLE nav_bar (
-    id INT PRIMARY KEY,
+CREATE TABLE tb_nav_bar (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     label VARCHAR(255),
-    url VARCHAR(255),
-    parent_id INT,
-    FOREIGN KEY (parent_id) REFERENCES nav_bar(id)
+    url VARCHAR(255)
 );
 
-CREATE TABLE categoria_produtos (
-    id INT PRIMARY KEY,
+CREATE TABLE tb_categoria_produtos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255),
     image VARCHAR(255),
     url VARCHAR(255),
@@ -20,43 +18,46 @@ CREATE TABLE categoria_produtos (
     em_promocao BOOLEAN
 );
 
-CREATE TABLE produtos_em_estoque (
-    id INT PRIMARY KEY,
+CREATE TABLE tb_produtos_em_estoque (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255),
     image VARCHAR(255),
     descricao_texto TEXT,
-    descricao_tamanho VARCHAR(255),
-    descricao_dimensao VARCHAR(255),
-    descricao_peso VARCHAR(255),
-    descricao_marca VARCHAR(255),
-    redirect_url VARCHAR(255),
     em_destaque BOOLEAN,
-    em_promocao BOOLEAN
+    em_promocao BOOLEAN,
+    categoria_id INT,
+    FOREIGN KEY (categoria_id) REFERENCES tb_categoria_produtos(id)
 );
 
-CREATE TABLE carrossel (
-    id INT PRIMARY KEY,
+CREATE TABLE tb_carrossel (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     imagem VARCHAR(255),
     url VARCHAR(255)
 );
 
-CREATE TABLE footer_contato (
-    id INT PRIMARY KEY,
+CREATE TABLE endereco (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    cep VARCHAR(10),
+    estado VARCHAR(255),
+    cidade VARCHAR(255),
+    logradouro VARCHAR(255),
+    numero VARCHAR(10),
+    bairro VARCHAR(255),
+    complemento VARCHAR(255)
+);
+
+CREATE TABLE contato (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     telefone_fixo VARCHAR(20),
     telefone_celular VARCHAR(20),
     telefone_ouvidoria VARCHAR(20),
     email VARCHAR(255),
-    endereco_cep VARCHAR(10),
-    endereco_estado VARCHAR(255),
-    endereco_cidade VARCHAR(255),
-    endereco_logradouro VARCHAR(255),
-    endereco_numero VARCHAR(10),
-    endereco_bairro VARCHAR(255),
-    endereco_complemento VARCHAR(255)
+    endereco_id INT,
+    FOREIGN KEY (endereco_id) REFERENCES endereco(id)
 );
 
 CREATE TABLE redirecionadores (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255),
     url VARCHAR(255)
 );
