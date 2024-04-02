@@ -11,18 +11,17 @@ CREATE TABLE tb_nav_bar (
 
 CREATE TABLE tb_categoria_produtos (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(255),
-    image VARCHAR(255),
-    url VARCHAR(255),
-    descricao TEXT,
-    em_promocao BOOLEAN
+    nome_categoria VARCHAR(255),
+    image_categoria VARCHAR(255),
+    url_categoria VARCHAR(255),
+    descricao_categoria VARCHAR(255)
 );
 
 CREATE TABLE tb_produtos_em_estoque (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255),
     image VARCHAR(255),
-    descricao_texto TEXT,
+    descricao VARCHAR(255),
     em_destaque BOOLEAN,
     em_promocao BOOLEAN,
     categoria_id INT,
