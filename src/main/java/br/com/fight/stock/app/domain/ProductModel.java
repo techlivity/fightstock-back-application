@@ -30,7 +30,7 @@ public class ProductModel {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
-    private ProductCategoryModel productCategoryModel;
+    private CategoryModel categoryModel;
 
     public Long getId() {
         return id;
@@ -80,11 +80,11 @@ public class ProductModel {
         this.promotion = promotion;
     }
 
-    public ProductCategoryModel getProductCategoryModel() {
-        return productCategoryModel;
+    public CategoryModel getCategoryModel() {
+        return categoryModel;
     }
 
-    public void setProductCategoryModel(ProductCategoryModel productCategoryModel) {
-        this.productCategoryModel = productCategoryModel;
+    public void setCategoryModel(CategoryModel categoryModel) {
+        this.categoryModel = categoryModel;
     }
 }
