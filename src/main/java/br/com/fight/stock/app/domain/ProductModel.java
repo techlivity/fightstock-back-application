@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_produtos_em_estoque")
+@Table(name = "tb_produtos")
 public class ProductModel {
     @Id
     @Column(name = "id")
@@ -27,64 +27,4 @@ public class ProductModel {
     private Boolean featured;
     @Column(name = "em_promocao")
     private Boolean promotion;
-
-    @ManyToOne
-    @JoinColumn(name = "categoria_id")
-    private CategoryModel categoryModel;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Boolean getFeatured() {
-        return featured;
-    }
-
-    public void setFeatured(Boolean featured) {
-        this.featured = featured;
-    }
-
-    public Boolean getPromotion() {
-        return promotion;
-    }
-
-    public void setPromotion(Boolean promotion) {
-        this.promotion = promotion;
-    }
-
-    public CategoryModel getCategoryModel() {
-        return categoryModel;
-    }
-
-    public void setCategoryModel(CategoryModel categoryModel) {
-        this.categoryModel = categoryModel;
-    }
 }

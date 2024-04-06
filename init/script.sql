@@ -9,23 +9,23 @@ CREATE TABLE tb_nav_bar (
     url VARCHAR(255)
 );
 
-CREATE TABLE tb_categoria_produtos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nome_categoria VARCHAR(255),
-    image_categoria VARCHAR(255),
-    url_categoria VARCHAR(255),
-    descricao_categoria VARCHAR(255)
-);
-
-CREATE TABLE tb_produtos_em_estoque (
+CREATE TABLE tb_produtos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255),
     image VARCHAR(255),
     descricao VARCHAR(255),
     em_destaque BOOLEAN,
-    em_promocao BOOLEAN,
-    categoria_id INT,
-    FOREIGN KEY (categoria_id) REFERENCES tb_categoria_produtos(id)
+    em_promocao BOOLEAN
+);
+
+CREATE TABLE tb_categoria (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome_categoria VARCHAR(255),
+    image_categoria VARCHAR(255),
+    url_categoria VARCHAR(255),
+    descricao_categoria VARCHAR(255),
+    produto_id INT NOT NULL,
+    FOREIGN KEY (produto_id) REFERENCES tb_produtos(id)
 );
 
 CREATE TABLE tb_carrossel (

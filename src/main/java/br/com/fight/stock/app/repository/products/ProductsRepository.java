@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface ProductsRepository extends JpaRepository<ProductModel, Long> {
 
-    Optional<List<ProductModel>> findByFeatured(Boolean featured);
+        Optional<List<ProductModel>> findByFeatured(Boolean featured);
+        Optional<List<ProductModel>> findByPromotion(Boolean promotion);
 }
