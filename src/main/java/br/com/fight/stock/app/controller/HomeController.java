@@ -51,7 +51,7 @@ public class HomeController {
     }
 
     private CategoryDTO convertCategoryModelToCategoryDTO(CategoryModel categoryModel) {
-        return new CategoryDTO(categoryModel.getImageUrl(), categoryModel.getName(), categoryModel.getDescription());
+        return new CategoryDTO(categoryModel.getName(), categoryModel.getImageUrl(), categoryModel.getDescription());
     }
 
     //TODO: talvez pensar em uma entidade melhor com uma query caso existam mais de duas paginas de dados com limite de 10 produtos por exemplo.
