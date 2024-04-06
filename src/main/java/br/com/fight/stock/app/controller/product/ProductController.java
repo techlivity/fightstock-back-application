@@ -19,13 +19,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody ProductModel product) {
+    public ResponseEntity<ProductModel> createProduct(@RequestBody ProductModel product) {
         ProductModel newProduct = repository.save(product);
         return ResponseEntity.ok(newProduct);
     }
 
     @GetMapping("/product")
-    public ResponseEntity<?> getProductsWithQuery(@RequestParam(required = false) Boolean featured,
+    public ResponseEntity<List<ProductModel>> getProductsWithQuery(@RequestParam(required = false) Boolean featured,
                                          @RequestParam(required = false) Boolean promotion) {
         if (featured != null && featured) {
             List<ProductModel> featuredProducts = repository.findByFeatured(true)
