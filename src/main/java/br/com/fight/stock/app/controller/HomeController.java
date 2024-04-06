@@ -54,7 +54,6 @@ public class HomeController {
         return new CategoryDTO(categoryModel.getImageUrl(), categoryModel.getName(), categoryModel.getDescription());
     }
 
-    //TODO: usar jackson propertie para mapear as entidades com snake case e no java camelCase
     //TODO: talvez pensar em uma entidade melhor com uma query caso existam mais de duas paginas de dados com limite de 10 produtos por exemplo.
     record CategoryDTO(String name, String imageUrl, String description) {
     }
