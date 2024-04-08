@@ -54,7 +54,7 @@ public class HomeController {
     record CategoryDTO(String name, String imageUrl, String description) {
     }
 
-    record HomeRecord(@JsonProperty("categorias") List<CategoryDTO> categoryModelList,
+    record HomeRecord(@("categorias") List<CategoryDTO> categoryModelList,
                       @JsonProperty("produtos") List<ProductModel> productModelList,
                       @JsonProperty("carrossel") List<CarouselModel> carousel,
                       @JsonProperty("contato")List<ContactModel> contactModels) {
