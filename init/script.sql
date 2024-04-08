@@ -34,7 +34,7 @@ CREATE TABLE tb_carrossel (
     url VARCHAR(255)
 );
 
-CREATE TABLE endereco (
+CREATE TABLE tb_endereco (
     id INT PRIMARY KEY AUTO_INCREMENT,
     cep VARCHAR(10),
     estado VARCHAR(255),
@@ -45,7 +45,7 @@ CREATE TABLE endereco (
     complemento VARCHAR(255)
 );
 
-CREATE TABLE contato (
+CREATE TABLE tb_contato (
     id INT PRIMARY KEY AUTO_INCREMENT,
     telefone_fixo VARCHAR(20),
     telefone_celular VARCHAR(20),
