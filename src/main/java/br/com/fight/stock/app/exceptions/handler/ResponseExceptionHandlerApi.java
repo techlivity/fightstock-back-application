@@ -1,9 +1,6 @@
 package br.com.fight.stock.app.exceptions.handler;
 
-import br.com.fight.stock.app.exceptions.CategorieNotFoundException;
-import br.com.fight.stock.app.exceptions.LabelNotFoundException;
-import br.com.fight.stock.app.exceptions.NotFoundCarouselException;
-import br.com.fight.stock.app.exceptions.ProductNotFoundException;
+import br.com.fight.stock.app.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -37,7 +34,19 @@ public class ResponseExceptionHandlerApi extends ResponseEntityExceptionHandler 
         return ResponseEntity.status(httpStatus).body(new Err(errorResponse));
     }
 
-    record Err(ErrorResponse response) {
+    @ExceptionHandler(value = {
+            ExcessContactException.class
+    })
+    public ResponseEntity handlerExcessExceptions(HttpServletRequest request, HttpServletResponse response, RuntimeException exception) {
+        var instant = Instant.now();
+        var formatter = DateTimeFormatter.ofPattern(PATTERN_TIME_STAMP).withZone(ZoneId.systemDefault());
+        var timeStamp = formatter.format(instant);
+        var httpStatus = HttpStatus.METHOD_NOT_ALLOWED.value();
+        var errorResponse = new ErrorResponse(exception.getMessage(), timeStamp);
+        return ResponseEntity.status(httpStatus).body(new Err(errorResponse));
+    }
+
+    record Err<T>(T response) {
     }
 
     record ErrorResponse(String message, String timeStamp) {
