@@ -1,6 +1,5 @@
 package br.com.fight.stock.app.controller.carousel;
 
-import br.com.fight.stock.app.controller.navbar.response.DataResponse;
 import br.com.fight.stock.app.domain.CarouselModel;
 import br.com.fight.stock.app.exceptions.NotFoundCarouselException;
 import br.com.fight.stock.app.repository.carousel.CarouselRepository;
@@ -46,5 +45,8 @@ public class CarouselController {
         } else {
             throw new NotFoundCarouselException(ApiUtils.formatMessage("erro ao excluir o id: %s não existe", id));
         }
+    }
+
+    record DataResponse(Object data) {
     }
 }

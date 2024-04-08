@@ -3,12 +3,6 @@ CREATE TABLE tb_logo (
     imagem_url VARCHAR(255)
 );
 
-CREATE TABLE tb_nav_bar (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    label VARCHAR(255),
-    url VARCHAR(255)
-);
-
 CREATE TABLE tb_produtos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255),

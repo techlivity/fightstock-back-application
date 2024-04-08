@@ -1,7 +1,6 @@
 package br.com.fight.stock.app;
 
 import br.com.fight.stock.app.configuration.TestDatabaseConfig;
-import br.com.fight.stock.app.domain.NavBarModel;
 import br.com.fight.stock.app.repository.nav.NavBarRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
