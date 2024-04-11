@@ -1,6 +1,6 @@
 package br.com.fight.stock.app.controller.contact;
 
-import br.com.fight.stock.app.domain.ContactModel;
+import br.com.fight.stock.app.domain.Contact;
 import br.com.fight.stock.app.exceptions.ExcessContactException;
 import br.com.fight.stock.app.repository.contact.ContactRepository;
 import org.springframework.http.HttpStatus;
@@ -20,15 +20,15 @@ public class ContactController {
     }
 
     @PostMapping
-    public ResponseEntity<ContactModel> createContact(@RequestBody ContactModel contactModel) {
+    public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
         if(contactRepository.findAll().isEmpty()){
-            return ResponseEntity.status(HttpStatus.CREATED).body(contactRepository.save(contactModel));
+            return ResponseEntity.status(HttpStatus.CREATED).body(contactRepository.save(contact));
         }
         throw new ExcessContactException("Excedeu a quantidade permitida de contatos");
     }
 
     @GetMapping
-    public ResponseEntity<List<ContactModel>> getAllContacts() {
+    public ResponseEntity<List<Contact>> getAllContacts() {
         return ResponseEntity.status(HttpStatus.OK).body(contactRepository.findAll());
     }
 }

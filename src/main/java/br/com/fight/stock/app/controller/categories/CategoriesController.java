@@ -1,8 +1,9 @@
 package br.com.fight.stock.app.controller.categories;
 
-import br.com.fight.stock.app.domain.CategoryModel;
-import br.com.fight.stock.app.domain.ProductModel;
+import br.com.fight.stock.app.domain.Category;
+import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.exceptions.CategorieNotFoundException;
+import br.com.fight.stock.app.exceptions.NotFoundCategoryException;
 import br.com.fight.stock.app.exceptions.ProductNotFoundException;
 import br.com.fight.stock.app.repository.categories.CategoriesRepository;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
@@ -15,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("categories")
 public class CategoriesController {
-
 
     private final CategoriesRepository categoriesRepository;
     private final ProductsRepository productsRepository;
@@ -30,20 +30,24 @@ public class CategoriesController {
         return ResponseEntity.ok(categoriesRepository.findAll());
     }
 
+    @GetMapping("{nameCategory")
+    public ResponseEntity<?> getCategoryByName(@PathVariable(name = "nameCategory") String nameCategory) {
+        return ResponseEntity.ok().body(categoriesRepository.findByName(nameCategory).orElseThrow(() -> new NotFoundCategoryException("Categoria não encontrada")));
+    }
+
     @PostMapping
-    public ResponseEntity<?> createCategorie(@RequestBody CategoryModel categoryModel) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoriesRepository.save(categoryModel));
+    public ResponseEntity<?> createCategorie(@RequestBody Category category) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoriesRepository.save(category));
     }
 
     @PostMapping("/{name_category}/{id_product}")
     public ResponseEntity<?> insertProductsInCategories(@PathVariable(name = "name_category") String nameCategory, @PathVariable(name = "id_product") Long id) {
-        //TODO melhorar tratamento usando ResponseStatusException com mensagem customizada e entidade de erro tratada
-        CategoryModel categoryModel = categoriesRepository.findByName(nameCategory).orElseThrow(() -> new CategorieNotFoundException("Categories is not found!!!"));
-        ProductModel product = productsRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product is not found!!!"));
-        List<ProductModel> products = categoryModel.getProducts();
+        Category category = categoriesRepository.findByName(nameCategory).orElseThrow(() -> new CategorieNotFoundException("Categories is not found!!!"));
+        Product product = productsRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product is not found!!!"));
+        List<Product> products = category.getProducts();
         products.add(product);
-        categoriesRepository.save(categoryModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryModel);
+        categoriesRepository.save(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
 
 }

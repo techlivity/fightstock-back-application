@@ -1,9 +1,9 @@
 package br.com.fight.stock.app.controller;
 
-import br.com.fight.stock.app.domain.CarouselModel;
-import br.com.fight.stock.app.domain.CategoryModel;
-import br.com.fight.stock.app.domain.ContactModel;
-import br.com.fight.stock.app.domain.ProductModel;
+import br.com.fight.stock.app.domain.Carousel;
+import br.com.fight.stock.app.domain.Category;
+import br.com.fight.stock.app.domain.Contact;
+import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.repository.carousel.CarouselRepository;
 import br.com.fight.stock.app.repository.categories.CategoriesRepository;
 import br.com.fight.stock.app.repository.contact.ContactRepository;
@@ -46,8 +46,8 @@ public class HomeController {
         ));
     }
 
-    private CategoryDTO convertCategoryModelToCategoryDTO(CategoryModel categoryModel) {
-        return new CategoryDTO(categoryModel.getName(), categoryModel.getImageUrl(), categoryModel.getDescription());
+    private CategoryDTO convertCategoryModelToCategoryDTO(Category category) {
+        return new CategoryDTO(category.getName(), category.getImageUrl(), category.getDescription());
     }
 
     //TODO: talvez pensar em uma entidade melhor com uma query caso existam mais de duas paginas de dados com limite de 10 produtos por exemplo.
@@ -55,8 +55,8 @@ public class HomeController {
     }
 
     record HomeRecord(@JsonProperty("categorias") List<CategoryDTO> categoryModelList,
-                      @JsonProperty("produtos") List<ProductModel> productModelList,
-                      @JsonProperty("carrossel") List<CarouselModel> carousel,
-                      @JsonProperty("contato")List<ContactModel> contactModels) {
+                      @JsonProperty("produtos") List<Product> productList,
+                      @JsonProperty("carrossel") List<Carousel> carousel,
+                      @JsonProperty("contato")List<Contact> contacts) {
     }
 }

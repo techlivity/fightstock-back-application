@@ -1,6 +1,6 @@
 package br.com.fight.stock.app.controller.carousel;
 
-import br.com.fight.stock.app.domain.CarouselModel;
+import br.com.fight.stock.app.domain.Carousel;
 import br.com.fight.stock.app.exceptions.NotFoundCarouselException;
 import br.com.fight.stock.app.repository.carousel.CarouselRepository;
 import br.com.fight.stock.app.utils.ApiUtils;
@@ -24,10 +24,10 @@ public class CarouselController {
     @PostMapping
     public ResponseEntity<DataResponse> createCarousel(@RequestBody
                                                        @Valid
-                                                       @NotNull CarouselModel carouselModel) {
+                                                       @NotNull Carousel carousel) {
         //TODO: regra para verificar o formato da URL.
         //TODO: regra para converção de imagem em base64 OU usar multi part na requisição
-        CarouselModel newCarousel = carouselRepository.save(carouselModel);
+        Carousel newCarousel = carouselRepository.save(carousel);
         return ResponseEntity.ok(new DataResponse(newCarousel));
     }
 
@@ -38,7 +38,7 @@ public class CarouselController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<DataResponse> deleteCarousel(@PathVariable(name = "id") Long id) {
-        Optional<CarouselModel> carouselModel = carouselRepository.findById(id);
+        Optional<Carousel> carouselModel = carouselRepository.findById(id);
         if (carouselModel.isPresent()) {
             carouselRepository.deleteById(id);
             return ResponseEntity.ok(new DataResponse("Carrosel excluido com sucesso !"));
