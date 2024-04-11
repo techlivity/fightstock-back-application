@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "tb_contato")
 @JsonPropertyOrder(value = {"id","telefone_fixo","telefone_celular","telefone_ouvidoria","e-mail","endereco"})
-public class ContactModel {
+public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +36,5 @@ public class ContactModel {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     @JsonProperty("endereco")
-    private AddressModel address;
+    private Address address;
 }

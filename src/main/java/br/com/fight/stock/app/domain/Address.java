@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_endereco")
-public class AddressModel {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

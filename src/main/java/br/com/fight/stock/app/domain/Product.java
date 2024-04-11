@@ -7,31 +7,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_categoria")
-public class CategoryModel {
-
+@Table(name = "tb_produtos")
+public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "nome_categoria")
+    @Column(name = "nome")
     @JsonProperty("nome")
     private String name;
-    @Column(name = "image_categoria")
+    @Column(name = "image")
     @JsonProperty("image_url")
     private String imageUrl;
-    @Column(name = "descricao_categoria")
+    @Column(name = "descricao")
     @JsonProperty("descrição")
     private String description;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
-    @JoinColumn(name="produto_id")
-    @JsonProperty("produtos")
-    private List<ProductModel> products;
+    @Column(name = "em_destaque")
+    @JsonProperty("em_destaque")
+    private Boolean featured;
+    @Column(name = "em_promocao")
+    @JsonProperty("em_promoção")
+    private Boolean promotion;
 }

@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_carrossel")
-public class CarouselModel {
+public class Carousel {
 
     @Id
     @Column(name = "id")
