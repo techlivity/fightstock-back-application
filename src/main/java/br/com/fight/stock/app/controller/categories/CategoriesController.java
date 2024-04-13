@@ -30,7 +30,7 @@ public class CategoriesController {
         return ResponseEntity.ok(categoriesRepository.findAll());
     }
 
-    @GetMapping("{nameCategory")
+    @GetMapping("{nameCategory}")
     public ResponseEntity<?> getCategoryByName(@PathVariable(name = "nameCategory") String nameCategory) {
         return ResponseEntity.ok().body(categoriesRepository.findByName(nameCategory).orElseThrow(() -> new NotFoundCategoryException("Categoria não encontrada")));
     }
@@ -40,8 +40,8 @@ public class CategoriesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriesRepository.save(category));
     }
 
-    @PostMapping("/{name_category}/{id_product}")
-    public ResponseEntity<?> insertProductsInCategories(@PathVariable(name = "name_category") String nameCategory, @PathVariable(name = "id_product") Long id) {
+    @PostMapping("/{nameCategory}/{idProduct}")
+    public ResponseEntity<?> insertProductsInCategories(@PathVariable(name = "nameCategory") String nameCategory, @PathVariable(name = "idProduct") Long id) {
         Category category = categoriesRepository.findByName(nameCategory).orElseThrow(() -> new CategorieNotFoundException("Categories is not found!!!"));
         Product product = productsRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product is not found!!!"));
         List<Product> products = category.getProducts();
