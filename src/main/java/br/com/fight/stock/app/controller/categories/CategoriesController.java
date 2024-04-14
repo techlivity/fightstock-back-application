@@ -9,6 +9,7 @@ import br.com.fight.stock.app.repository.categories.CategoriesRepository;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class CategoriesController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('user_admin')")
     public ResponseEntity<?> createCategorie(@RequestBody Category category) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriesRepository.save(category));
     }

@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(customizer -> {
                     customizer.requestMatchers("/users/**").permitAll();
                     customizer.requestMatchers(HttpMethod.GET).permitAll();
-                    customizer.anyRequest().authenticated();
+                    customizer.anyRequest().permitAll();
                 }).addFilterBefore(customBasicAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
