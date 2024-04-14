@@ -37,7 +37,7 @@ public class CategoriesController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('user_admin')")
+    @PreAuthorize("hasRole('USER_ADMIN')")
     public ResponseEntity<?> createCategorie(@RequestBody Category category) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriesRepository.save(category));
     }

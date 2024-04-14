@@ -19,7 +19,7 @@ public class UserPrincipal {
         this.password = user.getPassword();
 
         this.authorities = user.getRoles().stream().map(role -> {
-            return new SimpleGrantedAuthority("ROLE ".concat(role.getName()));
+            return new SimpleGrantedAuthority("ROLE_".concat(role.getName()));
         }).collect(Collectors.toList());
     }
 
