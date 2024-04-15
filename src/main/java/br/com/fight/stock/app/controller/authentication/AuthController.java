@@ -1,9 +1,9 @@
 package br.com.fight.stock.app.controller.authentication;
 
 import br.com.fight.stock.app.controller.authentication.dto.LoginDto;
-import br.com.fight.stock.app.controller.authentication.dto.SignUpDto;
-import br.com.fight.stock.app.domain.Role;
+import br.com.fight.stock.app.controller.authentication.dto.RecoverPasswordDto;
 import br.com.fight.stock.app.domain.User;
+import br.com.fight.stock.app.exceptions.NotFoundUserException;
 import br.com.fight.stock.app.repository.user.RoleRepository;
 import br.com.fight.stock.app.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/users/auth")
@@ -40,10 +38,19 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+                loginDto.usernameOrEmail(), loginDto.password()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
+    }
+
+    @PostMapping("/recover")
+    public ResponseEntity<String> changePassword(@RequestBody RecoverPasswordDto loginDto){
+        User user = userRepository.findByUsername(loginDto.email()).orElseThrow(() -> new NotFoundUserException("User email not found"));
+
+        user.setPassword(loginDto.newPassword());
+        userRepository.save(user);
+        return new ResponseEntity<>("Your password has been successfully changed.", HttpStatus.OK);
     }
 
     @PostMapping("/signup")

@@ -43,6 +43,7 @@ public class CategoriesController {
     }
 
     @PostMapping("/{nameCategory}/{idProduct}")
+    @PreAuthorize("hasRole('USER_ADMIN')")
     public ResponseEntity<?> insertProductsInCategories(@PathVariable(name = "nameCategory") String nameCategory, @PathVariable(name = "idProduct") Long id) {
         Category category = categoriesRepository.findByName(nameCategory).orElseThrow(() -> new CategorieNotFoundException("Categories is not found!!!"));
         Product product = productsRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product is not found!!!"));
