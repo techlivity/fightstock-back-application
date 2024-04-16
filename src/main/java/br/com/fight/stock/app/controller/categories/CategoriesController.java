@@ -1,5 +1,6 @@
 package br.com.fight.stock.app.controller.categories;
 
+import br.com.fight.stock.app.controller.authentication.dto.CategoriesDTO;
 import br.com.fight.stock.app.domain.Category;
 import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.exceptions.CategorieNotFoundException;
@@ -53,4 +54,23 @@ public class CategoriesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
 
+    @PatchMapping("{nameCategory}")
+    @PreAuthorize("hasRole('USER_ADMIN')")
+    public ResponseEntity<?> updateCategories(@RequestBody CategoriesDTO categoriesDTO) {
+        categoriesRepository.findByName(categoriesDTO.name()).ifPresentOrElse(category1 -> {
+            category1.setName(categoriesDTO.name());
+            category1.setImageUrl(categoriesDTO.imageUrl());
+            category1.setDescription(categoriesDTO.description());
+
+        }, () -> new CategorieNotFoundException("Categories is not found!!!"));
+
+        return ResponseEntity.status(HttpStatus.valueOf(201)).body("Sucessfully updated!");
+    }
+
+    @DeleteMapping("{idCategory}")
+    @PreAuthorize("hasRole('USER_ADMIN')")
+    public ResponseEntity<?> deleteCategories(@PathVariable(name = "idCategory") Long idCategory) {
+        categoriesRepository.deleteById(idCategory);
+        return ResponseEntity.status(HttpStatus.valueOf(200)).body("Sucessfully deleted!");
+    }
 }

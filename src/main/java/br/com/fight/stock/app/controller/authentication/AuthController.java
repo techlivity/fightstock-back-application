@@ -1,7 +1,6 @@
 package br.com.fight.stock.app.controller.authentication;
 
-import br.com.fight.stock.app.controller.authentication.dto.LoginDto;
-import br.com.fight.stock.app.controller.authentication.dto.RecoverPasswordDto;
+import br.com.fight.stock.app.controller.authentication.dto.AuthenticationDTO;
 import br.com.fight.stock.app.domain.User;
 import br.com.fight.stock.app.exceptions.NotFoundUserException;
 import br.com.fight.stock.app.repository.user.RoleRepository;
@@ -36,19 +35,19 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
+    public ResponseEntity<String> authenticateUser(@RequestBody AuthenticationDTO authenticationDTO){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.usernameOrEmail(), loginDto.password()));
+                authenticationDTO.email(), authenticationDTO.password()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
     }
 
     @PostMapping("/recover")
-    public ResponseEntity<String> changePassword(@RequestBody RecoverPasswordDto loginDto){
+    public ResponseEntity<String> changePassword(@RequestBody AuthenticationDTO loginDto){
         User user = userRepository.findByUsername(loginDto.email()).orElseThrow(() -> new NotFoundUserException("User email not found"));
 
-        user.setPassword(loginDto.newPassword());
+        user.setPassword(loginDto.password());
         userRepository.save(user);
         return new ResponseEntity<>("Your password has been successfully changed.", HttpStatus.OK);
     }
