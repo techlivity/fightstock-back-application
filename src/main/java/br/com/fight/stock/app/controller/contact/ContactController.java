@@ -5,6 +5,7 @@ import br.com.fight.stock.app.exceptions.ExcessContactException;
 import br.com.fight.stock.app.repository.contact.ContactRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ContactController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('USER_ADMIN')")
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
         if(contactRepository.findAll().isEmpty()){
             return ResponseEntity.status(HttpStatus.CREATED).body(contactRepository.save(contact));

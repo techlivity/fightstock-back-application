@@ -4,6 +4,7 @@ import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.exceptions.ProductNotFoundException;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('user_admin')")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product newProduct = repository.save(product);
         return ResponseEntity.ok(newProduct);
