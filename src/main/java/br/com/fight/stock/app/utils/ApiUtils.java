@@ -7,6 +7,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public abstract class ApiUtils {
+    private static final String PATTERN = "dd/MM/yyyy HH:mm:ss";
+    private static final String ZONE_ID = "America/Sao_Paulo";
 
     private ApiUtils() {
     }
@@ -16,8 +18,8 @@ public abstract class ApiUtils {
     }
 
     public static String convertInstantToLocalDateTime(Instant time) {
-        ZonedDateTime zonedDateTime = time.atZone(ZoneId.of("America/Sao_Paulo"));
+        ZonedDateTime zonedDateTime = time.atZone(ZoneId.of(ZONE_ID));
         LocalDateTime localDateTime = zonedDateTime.toLocalDateTime();
-        return localDateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+        return localDateTime.format(DateTimeFormatter.ofPattern(PATTERN));
     }
 }
