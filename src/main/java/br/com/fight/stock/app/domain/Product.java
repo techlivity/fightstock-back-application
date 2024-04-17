@@ -1,5 +1,7 @@
 package br.com.fight.stock.app.domain;
 
+import br.com.fight.stock.app.controller.product.dto.request.ProductRequest;
+import br.com.fight.stock.app.controller.product.dto.response.ProductResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +12,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+
+import static br.com.fight.stock.app.utils.ApiUtils.convertInstantToLocalDateTime;
 
 @Entity
 @Getter
@@ -46,4 +49,40 @@ public class Product {
     private Instant createdOn;
     @UpdateTimestamp
     private Instant lastUpdatedOn;
+
+    public Product(String name,
+                   String imageUrl,
+                   String description,
+                   Boolean featured,
+                   Boolean promotion,
+                   Boolean filed,
+                   Boolean published) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.featured = featured;
+        this.promotion = promotion;
+        this.filed = filed;
+        this.published = published;
+    }
+
+    public static Product convertProductRequestToProduct(ProductRequest productRequest) {
+        return new Product(productRequest.name(),
+                productRequest.imageURL(),
+                productRequest.description(),
+                productRequest.featured(),
+                productRequest.promotion(), false, false);
+    }
+
+    public static ProductResponse convertProductToProductResponse(Product product) {
+        return new ProductResponse(product.getFiled(),
+                product.getPublished(),
+                convertInstantToLocalDateTime(product.getCreatedOn()),
+                convertInstantToLocalDateTime(product.getLastUpdatedOn()),
+                product.getName(),
+                product.getImageUrl(),
+                product.getDescription(),
+                product.getFeatured(),
+                product.getPromotion());
+    }
 }

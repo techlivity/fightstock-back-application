@@ -1,8 +1,11 @@
 package br.com.fight.stock.app.controller.product;
 
+import br.com.fight.stock.app.controller.product.dto.request.ProductRequest;
+import br.com.fight.stock.app.controller.product.dto.response.ProductResponse;
 import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.exceptions.ProductNotFoundException;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,11 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER_ADMIN')")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
+        Product product = Product.convertProductRequestToProduct(productRequest);
         Product newProduct = repository.save(product);
-        return ResponseEntity.ok(newProduct);
+        ProductResponse productResponse = Product.convertProductToProductResponse(newProduct);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productResponse);
     }
 
     @GetMapping("/product")
