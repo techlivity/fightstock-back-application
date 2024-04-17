@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -33,4 +38,12 @@ public class Product {
     @Column(name = "em_promocao")
     @JsonProperty("em_promoção")
     private Boolean promotion;
+    @Column(name = "arquivado")
+    private Boolean filed;
+    @Column(name = "publicado")
+    private Boolean published;
+    @CreationTimestamp
+    private Instant createdOn;
+    @UpdateTimestamp
+    private Instant lastUpdatedOn;
 }

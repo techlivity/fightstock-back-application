@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -26,4 +30,8 @@ public class Carousel {
     @Column(name = "url")
     @JsonProperty("url_redirect")
     private String url;
+    @CreationTimestamp
+    private Instant createdOn;
+    @UpdateTimestamp
+    private Instant lastUpdatedOn;
 }

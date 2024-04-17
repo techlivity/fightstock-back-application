@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -34,4 +37,8 @@ public class Category {
     @JoinColumn(name="produto_id")
     @JsonProperty("produtos")
     private List<Product> products;
+    @CreationTimestamp
+    private Instant createdOn;
+    @UpdateTimestamp
+    private Instant lastUpdatedOn;
 }
