@@ -60,8 +60,8 @@ public class CategoriesController {
 
     @PatchMapping("{nameCategory}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    public ResponseEntity<?> updateCategories(@RequestBody CategoriesRequest categoriesRequest) {
-        Category category = categoriesRepository.findByName(categoriesRequest.name()).map(categoryMap ->
+    public ResponseEntity<?> updateCategories(@PathVariable(name = "nameCategory") String nameCategory, @RequestBody CategoriesRequest categoriesRequest) {
+        Category category = categoriesRepository.findByName(nameCategory).map(categoryMap ->
                 categoriesRepository.save(Category.convertCategoriesRequestToCategory(categoriesRequest, categoryMap)))
                 .orElseThrow(() -> new CategorieNotFoundException("Categories is not found!!!"));
 
