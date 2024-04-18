@@ -1,6 +1,6 @@
 package br.com.fight.stock.app.controller.categories;
 
-import br.com.fight.stock.app.controller.authentication.dto.CategoriesDTO;
+import br.com.fight.stock.app.controller.categories.dto.request.CategoriesRequest;
 import br.com.fight.stock.app.domain.Category;
 import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.exceptions.CategorieNotFoundException;
@@ -34,7 +34,8 @@ public class CategoriesController {
 
     @GetMapping("{nameCategory}")
     public ResponseEntity<?> getCategoryByName(@PathVariable(name = "nameCategory") String nameCategory) {
-        return ResponseEntity.ok().body(categoriesRepository.findByName(nameCategory).orElseThrow(() -> new NotFoundCategoryException("Categoria não encontrada")));
+        return ResponseEntity.ok().body(categoriesRepository.findByName(nameCategory)
+                .orElseThrow(() -> new NotFoundCategoryException("Categoria não encontrada")));
     }
 
     @PostMapping
@@ -45,9 +46,12 @@ public class CategoriesController {
 
     @PostMapping("/{nameCategory}/{idProduct}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    public ResponseEntity<?> insertProductsInCategories(@PathVariable(name = "nameCategory") String nameCategory, @PathVariable(name = "idProduct") Long id) {
-        Category category = categoriesRepository.findByName(nameCategory).orElseThrow(() -> new CategorieNotFoundException("Categories is not found!!!"));
-        Product product = productsRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product is not found!!!"));
+    public ResponseEntity<?> insertProductsInCategories(@PathVariable(name = "nameCategory") String nameCategory,
+                                                        @PathVariable(name = "idProduct") Long id) {
+        Category category = categoriesRepository.findByName(nameCategory)
+                .orElseThrow(() -> new CategorieNotFoundException("Categories is not found!!!"));
+        Product product = productsRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product is not found!!!"));
         List<Product> products = category.getProducts();
         products.add(product);
         categoriesRepository.save(category);
@@ -56,15 +60,12 @@ public class CategoriesController {
 
     @PatchMapping("{nameCategory}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    public ResponseEntity<?> updateCategories(@RequestBody CategoriesDTO categoriesDTO) {
-        categoriesRepository.findByName(categoriesDTO.name()).ifPresentOrElse(category1 -> {
-            category1.setName(categoriesDTO.name());
-            category1.setImageUrl(categoriesDTO.imageUrl());
-            category1.setDescription(categoriesDTO.description());
+    public ResponseEntity<?> updateCategories(@RequestBody CategoriesRequest categoriesRequest) {
+        Category category = categoriesRepository.findByName(categoriesRequest.name()).map(categoryMap ->
+                categoriesRepository.save(Category.convertCategoriesRequestToCategory(categoriesRequest, categoryMap)))
+                .orElseThrow(() -> new CategorieNotFoundException("Categories is not found!!!"));
 
-        }, () -> new CategorieNotFoundException("Categories is not found!!!"));
-
-        return ResponseEntity.status(HttpStatus.valueOf(201)).body("Sucessfully updated!");
+        return ResponseEntity.status(HttpStatus.valueOf(201)).body(category);
     }
 
     @DeleteMapping("{idCategory}")

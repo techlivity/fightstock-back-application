@@ -48,7 +48,9 @@ public class SecurityConfig {
                     customizer.requestMatchers("/users/**").permitAll();
                     customizer.requestMatchers(HttpMethod.GET).permitAll();
                     customizer.anyRequest().authenticated();
-                }).addFilterBefore(customBasicAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                })
+                .addFilterBefore(customBasicAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(Customizer.withDefaults());
 
         return http.build();
     }

@@ -1,12 +1,23 @@
 package br.com.fight.stock.app.controller.product;
 
+import br.com.fight.stock.app.controller.product.dto.request.ProductRequest;
+import br.com.fight.stock.app.controller.product.dto.request.TimeRequest;
+import br.com.fight.stock.app.controller.product.dto.response.ProductResponse;
 import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.exceptions.ProductNotFoundException;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
+import br.com.fight.stock.app.utils.ApiUtils;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.apache.coyote.Response;
+import org.modelmapper.ModelMapper;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -20,25 +31,65 @@ public class ProductController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('user_admin')")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    @SecurityRequirement(name = "Authorization")
+    @PreAuthorize("hasRole('USER_ADMIN')")
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
+        Product product = Product.convertProductRequestToProduct(productRequest);
         Product newProduct = repository.save(product);
-        return ResponseEntity.ok(newProduct);
+        ProductResponse productResponse = Product.convertProductToProductResponse(newProduct);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productResponse);
     }
 
     @GetMapping("/product")
-    public ResponseEntity<List<Product>> getProductsWithQuery(@RequestParam(required = false) Boolean featured,
-                                                              @RequestParam(required = false) Boolean promotion) {
+    public ResponseEntity<List<Product>> getProductsPublishedWithQuery(@RequestParam(required = false) Boolean featured,
+                                                                       @RequestParam(required = false) Boolean promotion,
+                                                                       @RequestParam Boolean published) {
         if (featured != null && featured) {
-            List<Product> featuredProducts = repository.findByFeatured(true)
+            List<Product> featuredProducts = repository.findByFeaturedAndPublished(true, published)
                     .orElseThrow(() -> new ProductNotFoundException("No featured products found"));
             return ResponseEntity.ok().body(featuredProducts);
         } else if (promotion != null && promotion) {
-            List<Product> promotionProducts = repository.findByPromotion(true)
+            List<Product> promotionProducts = repository.findByPromotionAndPublished(true, published)
                     .orElseThrow(() -> new ProductNotFoundException("No products on promotion found"));
             return ResponseEntity.ok().body(promotionProducts);
         } else {
-            throw new IllegalArgumentException("You must specify either 'featured=true' or 'promotion=true' to get products.");
+            return ResponseEntity.ok().body(repository.findByPublished(published)
+                    .orElseThrow(() -> new ProductNotFoundException("No products found !")));
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getProductWithTime(@RequestParam("day") int day,
+                                                @RequestParam(value = "month", required = false) @DateTimeFormat(pattern = "MM") Integer month,
+                                                @RequestParam(value = "year", required = false) @DateTimeFormat(pattern = "yyyy") Integer year) {
+        if (month == null) {
+            month = LocalDate.now().getMonthValue();
+        }
+        if (year == null) {
+            year = LocalDate.now().getYear();
+        }
+        List<Product> byCreationDate = repository.findByCreationDate(day, month, year);
+        List<ProductResponse> productRequests = byCreationDate.stream()
+                .map(Product::convertProductToProductResponse)
+                .toList();
+        return ResponseEntity.ok().body(productRequests);
+    }
+
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('USER_ADMIN')")
+    public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.ok().body("Product deleted successfully !");
+    }
+
+    @PatchMapping("{productId}")
+    @PreAuthorize("hasRole('USER_ADMIN')")
+    @Transactional
+    public ResponseEntity<Product> updateProduct(@PathVariable(name = "productId") Long id,
+                                                 @RequestBody ProductRequest productRequest) {
+        Product product = repository.findById(id).map(product1 ->
+                        repository.save(Product.convertProductRequestToProduct(productRequest, product1)))
+                .orElseThrow(() -> new ProductNotFoundException("Product not found ! "));
+        return ResponseEntity.ok().body(product);
     }
 }
