@@ -1,5 +1,6 @@
 package br.com.fight.stock.app.domain;
 
+import br.com.fight.stock.app.controller.categories.dto.request.CategoriesRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -41,4 +42,11 @@ public class Category {
     private Instant createdOn;
     @UpdateTimestamp
     private Instant lastUpdatedOn;
+
+    public static Category convertCategoriesRequestToCategory(CategoriesRequest categoriesRequest, Category category) {
+        category.setName(categoriesRequest.name());
+        category.setImageUrl(categoriesRequest.imageUrl());
+        category.setDescription(categoriesRequest.description());
+        return category;
+    }
 }

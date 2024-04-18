@@ -1,10 +1,17 @@
 package br.com.fight.stock.app.utils;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+
+import java.beans.PropertyDescriptor;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class ApiUtils {
     private static final String PATTERN = "dd/MM/yyyy HH:mm:ss";

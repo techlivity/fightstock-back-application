@@ -2,7 +2,6 @@ package br.com.fight.stock.app.domain;
 
 import br.com.fight.stock.app.controller.product.dto.request.ProductRequest;
 import br.com.fight.stock.app.controller.product.dto.response.ProductResponse;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,19 +26,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "nome")
-    @JsonProperty("nome")
     private String name;
     @Column(name = "image")
-    @JsonProperty("image_url")
     private String imageUrl;
     @Column(name = "descricao")
-    @JsonProperty("descrição")
     private String description;
     @Column(name = "em_destaque")
-    @JsonProperty("em_destaque")
     private Boolean featured;
     @Column(name = "em_promocao")
-    @JsonProperty("em_promoção")
     private Boolean promotion;
     @Column(name = "arquivado")
     private Boolean filed;
@@ -67,15 +61,27 @@ public class Product {
     }
 
     public static Product convertProductRequestToProduct(ProductRequest productRequest) {
-        return new Product(productRequest.name(),
+        return new Product(
+                productRequest.name(),
                 productRequest.imageURL(),
                 productRequest.description(),
                 productRequest.featured(),
                 productRequest.promotion(), false, false);
     }
 
+    public static Product convertProductRequestToProduct(ProductRequest productRequest, Product product) {
+        product.setName(productRequest.name());
+        product.setDescription(productRequest.description());
+        product.setImageUrl(productRequest.imageURL());
+        product.setPromotion(productRequest.promotion());
+        product.setFeatured(productRequest.featured());
+        return product;
+    }
+
     public static ProductResponse convertProductToProductResponse(Product product) {
-        return new ProductResponse(product.getFiled(),
+        return new ProductResponse(
+                product.getId(),
+                product.getFiled(),
                 product.getPublished(),
                 convertInstantToLocalDateTime(product.getCreatedOn()),
                 convertInstantToLocalDateTime(product.getLastUpdatedOn()),

@@ -1,4 +1,4 @@
-package br.com.fight.stock.app.controller;
+package br.com.fight.stock.app.controller.home;
 
 import br.com.fight.stock.app.domain.Carousel;
 import br.com.fight.stock.app.domain.Category;

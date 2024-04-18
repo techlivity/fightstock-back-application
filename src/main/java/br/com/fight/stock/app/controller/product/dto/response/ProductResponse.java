@@ -3,8 +3,9 @@ package br.com.fight.stock.app.controller.product.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder(value = {"nome","image_url","descrição"})
+@JsonPropertyOrder(value = {"id","nome","image_url", "descrição"})
 public record ProductResponse(
+        @JsonProperty("ID") Long id,
         @JsonProperty("arquivado") Boolean filed,
         @JsonProperty("publicado") Boolean published,
         @JsonProperty("criado_em") String createdOn,
