@@ -55,7 +55,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody User user){
 
-        if(Boolean.TRUE.equals(userRepository.existsByUsername(user.getUsername()))){
+        if(Boolean.TRUE.equals(userRepository.existsByUsername(user.getEmail()))){
             return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));

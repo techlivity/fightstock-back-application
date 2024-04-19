@@ -28,6 +28,7 @@ public class Product {
     @Column(name = "nome")
     private String name;
     @Column(name = "image")
+//    TODO: criar validação para o pattern de URL
     private String imageUrl;
     @Column(name = "descricao")
     private String description;

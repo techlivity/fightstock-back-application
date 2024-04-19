@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Getter
 public class UserPrincipal {
@@ -15,7 +14,7 @@ public class UserPrincipal {
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(User user) {
-        this.username = user.getUsername();
+        this.username = user.getEmail();
         this.password = user.getPassword();
 
         this.authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_".concat(role.getName()))).toList();

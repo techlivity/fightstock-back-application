@@ -1,13 +1,13 @@
 package br.com.fight.stock.app.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
@@ -20,7 +20,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
+    @Email(message = "invalid e-mail must count the following format e.g. : blablabla@domain")
+    private String email;
     private String password;
     @CreationTimestamp
     private Instant createdOn;
