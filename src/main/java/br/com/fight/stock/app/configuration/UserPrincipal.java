@@ -14,7 +14,7 @@ public class UserPrincipal {
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(User user) {
-        this.username = user.getEmail();
+        this.username = user.getUsername();
         this.password = user.getPassword();
 
         this.authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_".concat(role.getName()))).toList();

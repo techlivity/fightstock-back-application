@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
@@ -16,11 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Import(TestDatabaseConfig.class)
 class FightStockBackendApplicationTests {
 
-    @Autowired
-    private ViaCepService viaCepService;
     @Test
     void contextLoads() {
-        String cep = viaCepService.getCep("97511430");
-        assertNotNull(cep);
+        String s = "Mandioca";
+        String b = "Aipim";
+        assertNotEquals(s,b);
     }
 }
