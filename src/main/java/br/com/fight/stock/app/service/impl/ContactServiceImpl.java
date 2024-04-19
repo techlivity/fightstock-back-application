@@ -58,7 +58,7 @@ public class ContactServiceImpl implements ContactService {
                 throw new CepNotFoundException(formatMessage("CEP : %s not found", cep));
             }
         }catch (Exception e) {
-            throw new ErrorCallApiException("Error on callApi viacep stacktrace: %s", e);
+            throw new ErrorCallApiException(formatMessage("Error on callApi viacep stacktrace: %s", e.getMessage()));
         }
     }
 }

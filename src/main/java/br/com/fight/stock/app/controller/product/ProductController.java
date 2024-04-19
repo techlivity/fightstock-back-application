@@ -8,6 +8,8 @@ import br.com.fight.stock.app.exceptions.ProductNotFoundException;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
 import br.com.fight.stock.app.utils.ApiUtils;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,6 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@Validated
 public class ProductController {
 
     private final ProductsRepository repository;
@@ -59,8 +63,14 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getProductWithTime(@RequestParam("day") int day,
+    public ResponseEntity<?> getProductWithTime(@Min(value = 1, message = "day must be greater than or equal to 1")
+                                                @Max(value = 31, message = "day must be lower than or equal to 31")
+                                                @RequestParam("day") int day,
+                                                @Min(value = 1, message = "month must be greater than or equal to 1")
+                                                @Max(value = 12, message = "month must be lower than or equal to 12")
                                                 @RequestParam(value = "month", required = false) @DateTimeFormat(pattern = "MM") Integer month,
+                                                @Min(value = 2023, message = "year must be greater than or equal to 2023")
+                                                @Max(value = 2400, message = "year must be lower than or equal to 2400")
                                                 @RequestParam(value = "year", required = false) @DateTimeFormat(pattern = "yyyy") Integer year) {
         if (month == null) {
             month = LocalDate.now().getMonthValue();
