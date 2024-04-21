@@ -78,6 +78,16 @@ public class ResponseExceptionHandlerApi extends ResponseEntityExceptionHandler 
         return ResponseEntity.status(httpStatus).body(new Err(errorResponse));
     }
 
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity handlerInvalidException(HttpServletRequest request, HttpServletResponse response, Exception exception) {
+        var instant = Instant.now();
+        var formatter = DateTimeFormatter.ofPattern(PATTERN_TIME_STAMP).withZone(ZoneId.systemDefault());
+        var timeStamp = formatter.format(instant);
+        var httpStatus = HttpStatus.UNAUTHORIZED.value();
+        var errorResponse = new ErrorResponse(exception.getMessage(), timeStamp);
+        return ResponseEntity.status(httpStatus).body(new Err(errorResponse));
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, String> errors = new HashMap<>();

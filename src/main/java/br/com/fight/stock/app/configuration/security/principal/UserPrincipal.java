@@ -1,4 +1,4 @@
-package br.com.fight.stock.app.configuration;
+package br.com.fight.stock.app.configuration.security.principal;
 
 import br.com.fight.stock.app.domain.User;
 import lombok.Getter;
@@ -9,12 +9,12 @@ import java.util.Collection;
 
 @Getter
 public class UserPrincipal {
-    private String username;
+    private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(User user) {
-        this.username = user.getUsername();
+        this.email = user.getEmail();
         this.password = user.getPassword();
 
         this.authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_".concat(role.getName()))).toList();

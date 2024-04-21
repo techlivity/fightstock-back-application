@@ -1,4 +1,4 @@
-package br.com.fight.stock.app.configuration;
+package br.com.fight.stock.app.configuration.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

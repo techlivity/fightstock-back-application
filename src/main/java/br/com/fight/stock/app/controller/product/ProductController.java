@@ -46,15 +46,10 @@ public class ProductController {
 
     @PostMapping("{productID}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    public ResponseEntity<String> insertImageOnProduct(@PathVariable(name = "productID") Long id, @RequestParam("file") MultipartFile file) {
-        repository.findById(id).ifPresentOrElse(product -> {
-            try {
-                product.setImageData((Base64.getEncoder().encodeToString(file.getBytes())));
-                repository.save(product);
-            } catch (IOException e) {
-                throw new RuntimeException(e);//TODO: refatorar para uma excessao propria
-            }
-        }, () -> new ProductNotFoundException("Procuct Not Found ! "));
+    public ResponseEntity<String> insertImageOnProduct(@PathVariable(name = "productID") Long id, @RequestParam("file") MultipartFile file) throws IOException {
+        Product product = repository.findById(id).orElseThrow(() -> new ProductNotFoundException("Procuct Not Found ! "));
+        product.setImageData((Base64.getEncoder().encodeToString(file.getBytes())));
+        repository.save(product);
         return ResponseEntity.ok("Image upload successfully !");
     }
 

@@ -1,5 +1,6 @@
-package br.com.fight.stock.app.configuration;
+package br.com.fight.stock.app.configuration.security;
 
+import br.com.fight.stock.app.configuration.security.principal.UserPrincipal;
 import br.com.fight.stock.app.domain.User;
 import br.com.fight.stock.app.repository.user.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -38,11 +39,11 @@ public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
             String username = credentials[0];
             String password = credentials[1];
 
-            Optional<User> userOptional = userRepository.findByUsernameFetchRoles(username);
+            Optional<User> userOptional = userRepository.findByEmailFetchRoles(username);
 
             if(userOptional.isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                response.getWriter().write("User does not exist !"); //TODO: avaliar se vale a pena retornar, como o filtro ocorre antes de receber na controller isso quebra o metadado, nao podendo ser possivel a captura novamente.
+                response.getWriter().write("User does not exist !");
                 return;
             }
 
@@ -52,7 +53,8 @@ public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
 
             if(!valid) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                response.getWriter().write("Password not match !");
+                response.getWriter().print("Password not match !");
+                return;
             }
 
             setAuthentication(user);

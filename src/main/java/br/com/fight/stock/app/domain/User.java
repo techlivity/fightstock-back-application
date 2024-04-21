@@ -24,8 +24,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Email(message = "invalid e-mail must count the following format e.g. : blablabla@domain")
-    private String username;
+    private String email;
+    private String name;
     private String password;
+    private String imageData;
     @CreationTimestamp
     private Instant createdOn;
     @UpdateTimestamp
