@@ -40,7 +40,7 @@ public class Image implements Serializable {
     public static Image createImage(MultipartFile file) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(file.getBytes());
         BufferedImage imageBuffered = ImageIO.read(bis);
-        return new Image(file.getName(),
+        return new Image(file.getOriginalFilename(),
                 imageBuffered.getHeight(),
                 imageBuffered.getWidth(),
                 Base64.getEncoder()
