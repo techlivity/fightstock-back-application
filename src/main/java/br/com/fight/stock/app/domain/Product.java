@@ -2,6 +2,7 @@ package br.com.fight.stock.app.domain;
 
 import br.com.fight.stock.app.controller.product.dto.request.ProductRequest;
 import br.com.fight.stock.app.controller.product.dto.response.ProductResponse;
+import br.com.fight.stock.app.utils.ImageUtil;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.Base64;
 
 import static br.com.fight.stock.app.utils.ApiUtils.convertInstantToLocalDateTime;
 
@@ -27,9 +29,9 @@ public class Product {
     private Long id;
     @Column(name = "nome")
     private String name;
+    @Lob
     @Column(name = "image")
-//    TODO: criar validação para o pattern de URL
-    private String imageUrl;
+    private byte[] imageData;
     @Column(name = "descricao")
     private String description;
     @Column(name = "em_destaque")
@@ -46,14 +48,12 @@ public class Product {
     private Instant lastUpdatedOn;
 
     public Product(String name,
-                   String imageUrl,
                    String description,
                    Boolean featured,
                    Boolean promotion,
                    Boolean filed,
                    Boolean published) {
         this.name = name;
-        this.imageUrl = imageUrl;
         this.description = description;
         this.featured = featured;
         this.promotion = promotion;
@@ -64,7 +64,6 @@ public class Product {
     public static Product convertProductRequestToProduct(ProductRequest productRequest) {
         return new Product(
                 productRequest.name(),
-                productRequest.imageURL(),
                 productRequest.description(),
                 productRequest.featured(),
                 productRequest.promotion(), false, false);
@@ -73,7 +72,6 @@ public class Product {
     public static Product convertProductRequestToProduct(ProductRequest productRequest, Product product) {
         product.setName(productRequest.name());
         product.setDescription(productRequest.description());
-        product.setImageUrl(productRequest.imageURL());
         product.setPromotion(productRequest.promotion());
         product.setFeatured(productRequest.featured());
         return product;
@@ -87,7 +85,7 @@ public class Product {
                 convertInstantToLocalDateTime(product.getCreatedOn()),
                 convertInstantToLocalDateTime(product.getLastUpdatedOn()),
                 product.getName(),
-                product.getImageUrl(),
+                new String(Base64.getEncoder().encode(ImageUtil.decompressImage(product.getImageData()))),
                 product.getDescription(),
                 product.getFeatured(),
                 product.getPromotion());

@@ -1,17 +1,14 @@
 package br.com.fight.stock.app.controller.product;
 
 import br.com.fight.stock.app.controller.product.dto.request.ProductRequest;
-import br.com.fight.stock.app.controller.product.dto.request.TimeRequest;
 import br.com.fight.stock.app.controller.product.dto.response.ProductResponse;
 import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.exceptions.ProductNotFoundException;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
-import br.com.fight.stock.app.utils.ApiUtils;
+import br.com.fight.stock.app.utils.ImageUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import org.apache.coyote.Response;
-import org.modelmapper.ModelMapper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +16,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,6 +42,21 @@ public class ProductController {
         ProductResponse productResponse = Product.convertProductToProductResponse(newProduct);
         return ResponseEntity.status(HttpStatus.CREATED).body(productResponse);
     }
+
+    @PostMapping("{productID}")
+    @PreAuthorize("hasRole('USER_ADMIN')")
+    public ResponseEntity<String> insertImageOnProduct(@PathVariable(name = "productID") Long id, @RequestParam("file") MultipartFile file) {
+        repository.findById(id).ifPresentOrElse(product -> {
+            try {
+                product.setImageData((ImageUtil.compressImage(file.getBytes())));
+                repository.save(product);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }, () -> new ProductNotFoundException("Procuct Not Found ! "));
+        return ResponseEntity.ok("Image upload successfully !");
+    }
+
 
     @GetMapping("/product")
     public ResponseEntity<List<Product>> getProductsPublishedWithQuery(@RequestParam(required = false) Boolean featured,
