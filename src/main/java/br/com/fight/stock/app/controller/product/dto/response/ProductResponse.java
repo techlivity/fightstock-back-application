@@ -1,5 +1,6 @@
 package br.com.fight.stock.app.controller.product.dto.response;
 
+import br.com.fight.stock.app.domain.Image;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -11,7 +12,7 @@ public record ProductResponse(
         @JsonProperty("criado_em") String createdOn,
         @JsonProperty("atualizado_em") String lastUpdatedOn,
         @JsonProperty("nome") String name,
-        @JsonProperty("image_data") String imageData,
+        @JsonProperty("imagem") Image image,
         @JsonProperty("descrição") String description,
         @JsonProperty("em_destaque") Boolean featured,
         @JsonProperty("em_promoção") Boolean promotion) {

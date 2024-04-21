@@ -27,7 +27,8 @@ public class User {
     private String email;
     private String name;
     private String password;
-    private String imageData;
+    @OneToOne
+    private Image image;
     @CreationTimestamp
     private Instant createdOn;
     @UpdateTimestamp

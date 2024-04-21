@@ -1,35 +1,44 @@
 package br.com.fight.stock.app.controller.carousel;
 
 import br.com.fight.stock.app.domain.Carousel;
+import br.com.fight.stock.app.domain.Image;
 import br.com.fight.stock.app.exceptions.NotFoundCarouselException;
 import br.com.fight.stock.app.repository.carousel.CarouselRepository;
+import br.com.fight.stock.app.repository.image.ImageRepository;
 import br.com.fight.stock.app.utils.ApiUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
+
+import static br.com.fight.stock.app.domain.Image.createImage;
 
 @RestController
 @RequestMapping("/carousel")
 public class CarouselController {
 
     private final CarouselRepository carouselRepository;
+    private final ImageRepository imageRepository;
 
-    public CarouselController(CarouselRepository carouselRepository) {
+    public CarouselController(CarouselRepository carouselRepository, ImageRepository imageRepository) {
         this.carouselRepository = carouselRepository;
+        this.imageRepository = imageRepository;
     }
 
     @PostMapping
     @PreAuthorize("hasRole('USER_ADMIN')")
-    public ResponseEntity<DataResponse> createCarousel(@RequestBody
+    public ResponseEntity<DataResponse> createCarousel(@RequestParam(name = "file")
                                                        @Valid
-                                                       @NotNull Carousel carousel) {
-        //TODO: regra para verificar o formato da URL.
-        //TODO: regra para converção de imagem em base64 OU usar multi part na requisição
-        Carousel newCarousel = carouselRepository.save(carousel);
+                                                       @NotNull MultipartFile file, @RequestParam(name = "url") String url) throws IOException {
+        //TODO: regra para verificar o formato da URL e logica para onde redirecionar.
+        Image image = createImage(file);
+        imageRepository.save(image);
+        Carousel newCarousel = carouselRepository.save(new Carousel(image, url));
         return ResponseEntity.ok(new DataResponse(newCarousel));
     }
 

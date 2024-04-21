@@ -27,9 +27,8 @@ public class Product {
     private Long id;
     @Column(name = "nome")
     private String name;
-    @Lob
-    @Column(name = "image")
-    private String imageData;
+    @Column(name = "imagem")
+    private Image image;
     @Column(name = "descricao")
     private String description;
     @Column(name = "em_destaque")
@@ -83,7 +82,7 @@ public class Product {
                 convertInstantToLocalDateTime(product.getCreatedOn()),
                 convertInstantToLocalDateTime(product.getLastUpdatedOn()),
                 product.getName(),
-                product.getImageData(),
+                product.getImage(),
                 product.getDescription(),
                 product.getFeatured(),
                 product.getPromotion());

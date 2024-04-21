@@ -2,10 +2,11 @@ package br.com.fight.stock.app.controller.product;
 
 import br.com.fight.stock.app.controller.product.dto.request.ProductRequest;
 import br.com.fight.stock.app.controller.product.dto.response.ProductResponse;
+import br.com.fight.stock.app.domain.Image;
 import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.exceptions.ProductNotFoundException;
+import br.com.fight.stock.app.repository.image.ImageRepository;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
-import br.com.fight.stock.app.utils.ImageUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -20,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -29,9 +29,11 @@ import java.util.List;
 public class ProductController {
 
     private final ProductsRepository repository;
+    private final ImageRepository imageRepository;
 
-    public ProductController(ProductsRepository repository) {
+    public ProductController(ProductsRepository repository, ImageRepository imageRepository) {
         this.repository = repository;
+        this.imageRepository = imageRepository;
     }
 
     @PostMapping
@@ -48,7 +50,9 @@ public class ProductController {
     @PreAuthorize("hasRole('USER_ADMIN')")
     public ResponseEntity<String> insertImageOnProduct(@PathVariable(name = "productID") Long id, @RequestParam("file") MultipartFile file) throws IOException {
         Product product = repository.findById(id).orElseThrow(() -> new ProductNotFoundException("Procuct Not Found ! "));
-        product.setImageData((Base64.getEncoder().encodeToString(file.getBytes())));
+        Image image = Image.createImage(file);
+        imageRepository.save(image);
+        product.setImage(image);
         repository.save(product);
         return ResponseEntity.ok("Image upload successfully !");
     }

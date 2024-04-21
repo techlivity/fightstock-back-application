@@ -2,6 +2,7 @@ package br.com.fight.stock.app.controller.categories;
 
 import br.com.fight.stock.app.controller.categories.dto.request.CategoriesRequest;
 import br.com.fight.stock.app.domain.Category;
+import br.com.fight.stock.app.domain.Image;
 import br.com.fight.stock.app.domain.Product;
 import br.com.fight.stock.app.exceptions.CategorieNotFoundException;
 import br.com.fight.stock.app.exceptions.NotFoundCategoryException;
@@ -12,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -56,6 +59,15 @@ public class CategoriesController {
         products.add(product);
         categoriesRepository.save(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
+    }
+
+    @PostMapping("{nameCategory}")
+    public ResponseEntity<?> insertImageOnCategory(@RequestParam(name = "file")MultipartFile file, @PathVariable(name = "nameCategory") String nameCategory) throws IOException {
+        Category category = categoriesRepository.findByName(nameCategory)
+                .orElseThrow(() -> new CategorieNotFoundException("Categories is not found!!!"));
+        category.setImage(Image.createImage(file));
+        categoriesRepository.save(category);
+        return ResponseEntity.ok("Upload image Successfully !");
     }
 
     @PatchMapping("{nameCategory}")

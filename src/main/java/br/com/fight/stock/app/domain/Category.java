@@ -28,9 +28,9 @@ public class Category {
     @Column(name = "nome_categoria")
     @JsonProperty("nome")
     private String name;
-    @Column(name = "image_categoria")
-    @JsonProperty("image_url")
-    private String imageUrl;
+    @JsonProperty("imagem")
+    @OneToOne
+    private Image image;
     @Column(name = "descricao_categoria")
     @JsonProperty("descrição")
     private String description;
@@ -45,7 +45,6 @@ public class Category {
 
     public static Category convertCategoriesRequestToCategory(CategoriesRequest categoriesRequest, Category category) {
         category.setName(categoriesRequest.name());
-        category.setImageUrl(categoriesRequest.imageUrl());
         category.setDescription(categoriesRequest.description());
         return category;
     }

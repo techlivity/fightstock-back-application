@@ -1,16 +1,12 @@
 package br.com.fight.stock.app.controller.home;
 
-import br.com.fight.stock.app.domain.Carousel;
-import br.com.fight.stock.app.domain.Category;
-import br.com.fight.stock.app.domain.Contact;
-import br.com.fight.stock.app.domain.Product;
+import br.com.fight.stock.app.domain.*;
 import br.com.fight.stock.app.repository.carousel.CarouselRepository;
 import br.com.fight.stock.app.repository.categories.CategoriesRepository;
 import br.com.fight.stock.app.repository.contact.ContactRepository;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,11 +44,11 @@ public class HomeController {
     }
 
     private CategoryDTO convertCategoryModelToCategoryDTO(Category category) {
-        return new CategoryDTO(category.getName(), category.getImageUrl(), category.getDescription());
+        return new CategoryDTO(category.getName(), category.getImage(), category.getDescription());
     }
 
     //TODO: talvez pensar em uma entidade melhor com uma query caso existam mais de duas paginas de dados com limite de 10 produtos por exemplo.
-    record CategoryDTO(String name, String imageUrl, String description) {
+    record CategoryDTO(String name, Image image, String description) {
     }
 
     record HomeRecord(@JsonProperty("categorias") List<CategoryDTO> categoryModelList,
