@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -48,10 +49,10 @@ public class ProductController {
     public ResponseEntity<String> insertImageOnProduct(@PathVariable(name = "productID") Long id, @RequestParam("file") MultipartFile file) {
         repository.findById(id).ifPresentOrElse(product -> {
             try {
-                product.setImageData((ImageUtil.compressImage(file.getBytes())));
+                product.setImageData((Base64.getEncoder().encodeToString(file.getBytes())));
                 repository.save(product);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException(e);//TODO: refatorar para uma excessao propria
             }
         }, () -> new ProductNotFoundException("Procuct Not Found ! "));
         return ResponseEntity.ok("Image upload successfully !");

@@ -2,7 +2,6 @@ package br.com.fight.stock.app.domain;
 
 import br.com.fight.stock.app.controller.product.dto.request.ProductRequest;
 import br.com.fight.stock.app.controller.product.dto.response.ProductResponse;
-import br.com.fight.stock.app.utils.ImageUtil;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.util.Base64;
 
 import static br.com.fight.stock.app.utils.ApiUtils.convertInstantToLocalDateTime;
 
@@ -31,7 +29,7 @@ public class Product {
     private String name;
     @Lob
     @Column(name = "image")
-    private byte[] imageData;
+    private String imageData;
     @Column(name = "descricao")
     private String description;
     @Column(name = "em_destaque")
@@ -85,7 +83,7 @@ public class Product {
                 convertInstantToLocalDateTime(product.getCreatedOn()),
                 convertInstantToLocalDateTime(product.getLastUpdatedOn()),
                 product.getName(),
-                new String(Base64.getEncoder().encode(ImageUtil.decompressImage(product.getImageData()))),
+                product.getImageData(),
                 product.getDescription(),
                 product.getFeatured(),
                 product.getPromotion());

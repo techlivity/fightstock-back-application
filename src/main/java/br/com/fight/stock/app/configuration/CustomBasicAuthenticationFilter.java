@@ -42,7 +42,7 @@ public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
 
             if(userOptional.isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("User does not exist !"); //TODO: avaliar se vale a pena retornar, como o filtro ocorre antes de receber na controller isso quebra o metadado, nao podendo ser possivel a captura novamente.
+//                response.getWriter().write("User does not exist !"); //TODO: avaliar se vale a pena retornar, como o filtro ocorre antes de receber na controller isso quebra o metadado, nao podendo ser possivel a captura novamente.
                 return;
             }
 
@@ -52,7 +52,7 @@ public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
 
             if(!valid) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Password not match !");
+//                response.getWriter().write("Password not match !");
             }
 
             setAuthentication(user);
