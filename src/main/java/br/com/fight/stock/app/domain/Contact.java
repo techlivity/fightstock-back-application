@@ -14,12 +14,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_contato")
+@Table(name = "contato")
 @JsonPropertyOrder(value = {"id","telefone_fixo","telefone_celular","telefone_ouvidoria","e-mail","endereco"})
 public class Contact {
 

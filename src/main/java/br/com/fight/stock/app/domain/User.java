@@ -43,4 +43,11 @@ public class User {
     @ManyToMany
     @JsonProperty("cargo")
     private List<Role> roles;
+
+    public User(String email, String name, String password, List<Role> roles) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.roles = roles;
+    }
 }

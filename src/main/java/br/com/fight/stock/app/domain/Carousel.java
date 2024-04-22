@@ -16,7 +16,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_carrossel")
+@Table(name = "carrossel")
 public class Carousel {
 
     @Id

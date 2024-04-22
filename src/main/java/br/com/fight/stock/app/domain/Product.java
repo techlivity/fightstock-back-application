@@ -19,7 +19,7 @@ import static br.com.fight.stock.app.utils.ApiUtils.convertInstantToLocalDateTim
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_produtos")
+@Table(name = "produtos")
 public class Product {
     @Id
     @Column(name = "id")
@@ -27,7 +27,6 @@ public class Product {
     private Long id;
     @Column(name = "nome")
     private String name;
-    @Column(name = "imagem")
     @OneToOne(cascade = CascadeType.ALL)
     private Image image;
     @Column(name = "descricao")

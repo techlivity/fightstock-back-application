@@ -1,6 +1,7 @@
 package br.com.fight.stock.app.controller.authentication;
 
 import br.com.fight.stock.app.controller.authentication.dto.AuthenticationDTO;
+import br.com.fight.stock.app.controller.authentication.dto.request.UserRequest;
 import br.com.fight.stock.app.domain.Image;
 import br.com.fight.stock.app.domain.User;
 import br.com.fight.stock.app.exceptions.NotFoundUserException;
@@ -61,13 +62,14 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody UserRequest userRequest) {
 
-        if (Boolean.TRUE.equals(userRepository.existsByEmail(user.getEmail()))) {
+        if (Boolean.TRUE.equals(userRepository.existsByEmail(userRequest.getEmail()))) {
             return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
-        user.setPassword(passwordEncoder.encode(validatePassword(user.getPassword())));
-        userRepository.save(user);
+        userRequest.setPassword(passwordEncoder.encode(validatePassword(userRequest.getPassword())));
+
+        userRepository.save(new User(userRequest.getEmail(), userRequest.getName(), userRequest.getPassword(), userRequest.getRoles()));
 
         return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
     }
