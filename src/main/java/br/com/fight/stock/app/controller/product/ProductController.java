@@ -2,23 +2,16 @@ package br.com.fight.stock.app.controller.product;
 
 import br.com.fight.stock.app.controller.product.dto.request.ProductRequest;
 import br.com.fight.stock.app.controller.product.dto.response.ProductResponse;
-import br.com.fight.stock.app.domain.Image;
 import br.com.fight.stock.app.domain.Product;
-import br.com.fight.stock.app.exceptions.ProductNotFoundException;
-import br.com.fight.stock.app.repository.image.ImageRepository;
-import br.com.fight.stock.app.repository.products.ProductsRepository;
 import br.com.fight.stock.app.service.product.ProductService;
-import br.com.fight.stock.app.service.product.core.ProductSpecification;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,7 +73,6 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.deleteProduct(id));
     }
 
-    @Transactional
     @PatchMapping("{productId}")
     @PreAuthorize("hasRole('USER_ADMIN')")
     @Operation(security = { @SecurityRequirement(name = "basicScheme") })
