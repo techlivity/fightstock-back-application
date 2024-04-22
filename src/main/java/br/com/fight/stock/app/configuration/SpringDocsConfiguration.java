@@ -15,10 +15,7 @@ public class SpringDocsConfiguration {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .components(new Components()
-                        .addSecuritySchemes("basicScheme",
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("basic")));
+                .components(new Components().addSecuritySchemes("basicScheme",
+                        new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")));
     }
 }

@@ -9,6 +9,7 @@ import br.com.fight.stock.app.repository.image.ImageRepository;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
 import br.com.fight.stock.app.service.product.ProductService;
 import br.com.fight.stock.app.service.product.core.ProductSpecification;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -37,14 +38,15 @@ public class ProductController {
     }
 
     @PostMapping
-    @SecurityRequirement(name = "Authorization")
     @PreAuthorize("hasRole('USER_ADMIN')")
+    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(productRequest));
     }
 
     @PostMapping("{productID}")
     @PreAuthorize("hasRole('USER_ADMIN')")
+    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<String> insertImageOnProduct(@PathVariable(name = "productID") Long id,
                                                        @RequestParam("file") MultipartFile file) throws IOException {
         return ResponseEntity.ok(productService.insertImage(id, file));
@@ -73,13 +75,15 @@ public class ProductController {
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('USER_ADMIN')")
+    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok().body(productService.deleteProduct(id));
     }
 
+    @Transactional
     @PatchMapping("{productId}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Transactional
+    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<Product> updateProduct(@PathVariable(name = "productId") Long id,
                                                  @RequestBody ProductRequest productRequest) {
         return ResponseEntity.ok().body(productService.updateProduct(id, productRequest));

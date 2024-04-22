@@ -6,6 +6,8 @@ import br.com.fight.stock.app.exceptions.NotFoundCarouselException;
 import br.com.fight.stock.app.repository.carousel.CarouselRepository;
 import br.com.fight.stock.app.repository.image.ImageRepository;
 import br.com.fight.stock.app.utils.ApiUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,7 @@ public class CarouselController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER_ADMIN')")
+    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<DataResponse> createCarousel(@RequestParam(name = "file")
                                                        @Valid
                                                        @NotNull MultipartFile file, @RequestParam(name = "url") String url) throws IOException {
@@ -49,6 +52,7 @@ public class CarouselController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('USER_ADMIN')")
+    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<DataResponse> deleteCarousel(@PathVariable(name = "id") Long id) {
         Optional<Carousel> carouselModel = carouselRepository.findById(id);
         if (carouselModel.isPresent()) {

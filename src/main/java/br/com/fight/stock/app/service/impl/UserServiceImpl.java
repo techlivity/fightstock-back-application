@@ -8,20 +8,20 @@ import br.com.fight.stock.app.exceptions.NotFoundUserException;
 import br.com.fight.stock.app.repository.image.ImageRepository;
 import br.com.fight.stock.app.repository.user.UserRepository;
 import br.com.fight.stock.app.service.user.UserService;
-import jdk.jshell.spi.ExecutionControl;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 import static br.com.fight.stock.app.utils.ApiUtils.validatePassword;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
