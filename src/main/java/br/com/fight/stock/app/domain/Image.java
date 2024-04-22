@@ -1,5 +1,6 @@
 package br.com.fight.stock.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,21 +21,28 @@ import java.util.Base64;
 @Getter
 @Setter
 @Entity
-@Table(name = "Image")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "Image")
 public class Image implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonProperty("nome")
     private String name;
+    @JsonProperty("altura")
     private Integer height;
+    @JsonProperty("largura")
     private Integer width;
+    @JsonProperty("dados")
     private String data;
+    @JsonProperty("extensão")
     private String extension;
     @CreationTimestamp
+    @JsonProperty("criado_em")
     private Instant createdOn;
     @UpdateTimestamp
+    @JsonProperty("atualizado_em")
     private Instant lastUpdatedOn;
 
     public Image(String name, Integer height, Integer width, String data, String extension) {
@@ -49,9 +57,13 @@ public class Image implements Serializable {
         ByteArrayInputStream bis = new ByteArrayInputStream(file.getBytes());
         BufferedImage imageBuffered = ImageIO.read(bis);
         String fileName = file.getOriginalFilename();
-        int lastDotIndex = fileName.lastIndexOf(".");
-        String name = fileName.substring(0, lastDotIndex);
-        String extension = fileName.substring(lastDotIndex + 1);
+        String name = "";
+        String extension = "";
+        if(fileName != null) {
+            int lastDotIndex = fileName.lastIndexOf(".");
+            name = fileName.substring(0, lastDotIndex);
+            extension = fileName.substring(lastDotIndex + 1);
+        }
         return new Image(name,
                 imageBuffered.getHeight(),
                 imageBuffered.getWidth(),

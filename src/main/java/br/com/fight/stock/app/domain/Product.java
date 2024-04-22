@@ -28,6 +28,7 @@ public class Product {
     @Column(name = "nome")
     private String name;
     @Column(name = "imagem")
+    @OneToOne(cascade = CascadeType.ALL)
     private Image image;
     @Column(name = "descricao")
     private String description;

@@ -23,16 +23,17 @@ public class Carousel {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonProperty("image")
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonProperty("imagem")
     private Image image;
-    @Column(name = "url")
-    @JsonProperty("url_redirect")
+    @JsonProperty("redirecionamento_url")
 //    TODO: criar validadores de URL com pattern
     private String url;
     @CreationTimestamp
+    @JsonProperty("criado_em")
     private Instant createdOn;
     @UpdateTimestamp
+    @JsonProperty("atualizado_em")
     private Instant lastUpdatedOn;
 
     public Carousel(Image image, String url) {

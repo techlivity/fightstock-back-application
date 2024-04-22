@@ -25,13 +25,11 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "nome_categoria")
     @JsonProperty("nome")
     private String name;
     @JsonProperty("imagem")
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Image image;
-    @Column(name = "descricao_categoria")
     @JsonProperty("descrição")
     private String description;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
