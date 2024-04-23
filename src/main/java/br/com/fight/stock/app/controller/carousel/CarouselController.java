@@ -32,9 +32,9 @@ public class CarouselController {
         this.imageRepository = imageRepository;
     }
 
-    @PostMapping
+    @PostMapping(consumes = "multipart/form-data")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
+    @Operation(summary = "Cria um banner de carrosel", security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<DataResponse> createCarousel(@RequestParam(name = "file")
                                                        @Valid
                                                        @NotNull MultipartFile file, @RequestParam(name = "url") String url) throws IOException {
@@ -46,13 +46,14 @@ public class CarouselController {
     }
 
     @GetMapping
+    @Operation(summary = "Recupera todos banner de carrosel")
     public ResponseEntity<DataResponse> getAllCarousel() {
         return ResponseEntity.ok(new DataResponse(carouselRepository.findAll()));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
+    @Operation(summary = "Remove um banner de carrosel", security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<DataResponse> deleteCarousel(@PathVariable(name = "id") Long id) {
         Optional<Carousel> carouselModel = carouselRepository.findById(id);
         if (carouselModel.isPresent()) {

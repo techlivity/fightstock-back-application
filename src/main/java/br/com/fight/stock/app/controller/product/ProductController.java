@@ -32,14 +32,14 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
+    @Operation(summary = "Cria um produto", security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(productRequest));
     }
 
-    @PostMapping("{productID}")
+    @PostMapping(value = "{productID}", consumes = "multipart/form-data")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
+    @Operation(summary = "Insere uma imagem em um produto", security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<String> insertImageOnProduct(@PathVariable(name = "productID") Long id,
                                                        @RequestParam("file") MultipartFile file) throws IOException {
         return ResponseEntity.ok(productService.insertImage(id, file));
@@ -47,6 +47,7 @@ public class ProductController {
 
 
     @GetMapping("/product")
+    @Operation(summary = "Recupera um produto com uma especificação")
     public ResponseEntity<List<Product>> getProductsWithSpecification(@RequestParam(required = false) Boolean featured,
                                                                       @RequestParam(required = false) Boolean promotion,
                                                                       @RequestParam Boolean published) {
@@ -54,6 +55,7 @@ public class ProductController {
     }
 
     @GetMapping
+    @Operation(summary = "Recupera um produto com uma data")
     public ResponseEntity<List<ProductResponse>> getProductWithTime(@Min(value = 1, message = "day must be greater than or equal to 1")
                                                                     @Max(value = 31, message = "day must be lower than or equal to 31")
                                                                     @RequestParam("day") int day,
@@ -68,14 +70,14 @@ public class ProductController {
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
+    @Operation(summary = "Remove um produto", security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok().body(productService.deleteProduct(id));
     }
 
     @PatchMapping("{productId}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
+    @Operation(summary = "Atualiza um produto", security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<Product> updateProduct(@PathVariable(name = "productId") Long id,
                                                  @RequestBody ProductRequest productRequest) {
         return ResponseEntity.ok().body(productService.updateProduct(id, productRequest));

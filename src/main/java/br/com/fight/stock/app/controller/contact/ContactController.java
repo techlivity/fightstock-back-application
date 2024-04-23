@@ -26,12 +26,13 @@ public class ContactController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
+    @Operation(summary = "cria um contato, com informações da empresa do footer", security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
         return ResponseEntity.ok().body(contactService.saveContact(contact));
     }
 
     @GetMapping
+    @Operation(summary = "Recupera contato da empresa")
     public ResponseEntity<Contact> getContact() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(contactService.getContact());
@@ -39,7 +40,7 @@ public class ContactController {
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(security = { @SecurityRequirement(name = "basicScheme") })
+    @Operation(summary = "Remove um contato cadastrado", security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<String> deleteContact(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok().body(contactService.deleteContact(id));
     }
