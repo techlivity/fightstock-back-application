@@ -43,9 +43,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String deleteProduct(Long id) {
-        productsRepository.deleteById(id);
-        return "Product deleted successfully !";
+    public String archiveProduct(Long id) {
+        Product product = productsRepository.findById(id).orElseThrow();
+        product.setFiled(true);
+        product.setPublished(false);
+        return "Product archived successfully !";
     }
 
     @Override
