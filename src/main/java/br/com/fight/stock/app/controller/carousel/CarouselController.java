@@ -1,11 +1,7 @@
 package br.com.fight.stock.app.controller.carousel;
 
 import br.com.fight.stock.app.domain.Carousel;
-import br.com.fight.stock.app.domain.Image;
-import br.com.fight.stock.app.exceptions.NotFoundCarouselException;
-import br.com.fight.stock.app.repository.carousel.CarouselRepository;
-import br.com.fight.stock.app.repository.image.ImageRepository;
-import br.com.fight.stock.app.utils.ApiUtils;
+import br.com.fight.stock.app.service.carousel.CarouselService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -16,54 +12,37 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
-
-import static br.com.fight.stock.app.domain.Image.createImage;
+import java.util.List;
 
 @RestController
 @RequestMapping("/carousel")
 public class CarouselController {
 
-    private final CarouselRepository carouselRepository;
-    private final ImageRepository imageRepository;
+    private final CarouselService carouselService;
 
-    public CarouselController(CarouselRepository carouselRepository, ImageRepository imageRepository) {
-        this.carouselRepository = carouselRepository;
-        this.imageRepository = imageRepository;
+    public CarouselController(CarouselService carouselService) {
+        this.carouselService = carouselService;
     }
 
     @PostMapping(consumes = "multipart/form-data")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(summary = "Cria um banner de carrosel", security = { @SecurityRequirement(name = "basicScheme") })
-    public ResponseEntity<DataResponse> createCarousel(@RequestParam(name = "file")
-                                                       @Valid
-                                                       @NotNull MultipartFile file, @RequestParam(name = "url") String url) throws IOException {
-        //TODO: regra para verificar o formato da URL e logica para onde redirecionar.
-        Image image = createImage(file);
-        imageRepository.save(image);
-        Carousel newCarousel = carouselRepository.save(new Carousel(image, url));
-        return ResponseEntity.ok(new DataResponse(newCarousel));
+    @Operation(summary = "Cria um banner de carrosel", security = {@SecurityRequirement(name = "basicScheme")})
+    public ResponseEntity<Carousel> createCarousel(@RequestParam(name = "file")
+                                                   @Valid
+                                                   @NotNull MultipartFile file, @RequestParam(name = "url") String url) throws IOException {
+        return ResponseEntity.ok(carouselService.createCarousel(file, url));
     }
 
     @GetMapping
     @Operation(summary = "Recupera todos banner de carrosel")
-    public ResponseEntity<DataResponse> getAllCarousel() {
-        return ResponseEntity.ok(new DataResponse(carouselRepository.findAll()));
+    public ResponseEntity<List<Carousel>> getAllCarousel() {
+        return ResponseEntity.ok(carouselService.getAllCarousel());
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('USER_ADMIN')")
-    @Operation(summary = "Remove um banner de carrosel", security = { @SecurityRequirement(name = "basicScheme") })
-    public ResponseEntity<DataResponse> deleteCarousel(@PathVariable(name = "id") Long id) {
-        Optional<Carousel> carouselModel = carouselRepository.findById(id);
-        if (carouselModel.isPresent()) {
-            carouselRepository.deleteById(id);
-            return ResponseEntity.ok(new DataResponse("Carrosel excluido com sucesso !"));
-        } else {
-            throw new NotFoundCarouselException(ApiUtils.formatMessage("erro ao excluir o id: %s não existe", id));
-        }
-    }
-
-    record DataResponse(Object data) {
+    @Operation(summary = "Remove um banner de carrosel", security = {@SecurityRequirement(name = "basicScheme")})
+    public ResponseEntity<String> deleteCarousel(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(carouselService.deleteCarousel(id));
     }
 }
