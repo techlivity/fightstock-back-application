@@ -1,5 +1,6 @@
 package br.com.fight.stock.app.configuration.security;
 
+import br.com.fight.stock.app.configuration.security.handler.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,7 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -38,6 +41,10 @@ public class SecurityConfig {
             AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+    @Bean
+    public AuthenticationEntryPoint accessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, CustomBasicAuthenticationFilter customBasicAuthenticationFilter) throws Exception {
@@ -49,9 +56,8 @@ public class SecurityConfig {
                     customizer.requestMatchers(HttpMethod.GET).permitAll();
                     customizer.anyRequest().authenticated();
                 })
-                .addFilterBefore(customBasicAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(Customizer.withDefaults());
-
+                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(accessDeniedHandler()))
+                .addFilterBefore(customBasicAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
