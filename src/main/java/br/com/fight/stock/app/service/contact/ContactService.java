@@ -1,4 +1,4 @@
-package br.com.fight.stock.app.service;
+package br.com.fight.stock.app.service.contact;
 
 import br.com.fight.stock.app.domain.Contact;
 

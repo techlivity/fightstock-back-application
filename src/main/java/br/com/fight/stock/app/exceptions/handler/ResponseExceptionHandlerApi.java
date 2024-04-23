@@ -46,7 +46,8 @@ public class ResponseExceptionHandlerApi extends ResponseEntityExceptionHandler 
 
     @ExceptionHandler(value = {
             ExcessContactException.class,
-            ErrorProductException.class
+            ErrorProductException.class,
+            PasswordFormatException.class
     })
     public ResponseEntity handlerExcessExceptions(HttpServletRequest request, HttpServletResponse response, RuntimeException exception) {
         var instant = Instant.now();

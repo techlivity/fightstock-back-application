@@ -1,4 +1,4 @@
-package br.com.fight.stock.app.service;
+package br.com.fight.stock.app.service.cep;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

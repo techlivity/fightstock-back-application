@@ -1,4 +1,4 @@
-package br.com.fight.stock.app.service;
+package br.com.fight.stock.app.service.user;
 
 import br.com.fight.stock.app.domain.User;
 import br.com.fight.stock.app.repository.user.UserRepository;

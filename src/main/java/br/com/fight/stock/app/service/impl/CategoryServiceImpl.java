@@ -9,7 +9,7 @@ import br.com.fight.stock.app.exceptions.NotFoundCategoryException;
 import br.com.fight.stock.app.exceptions.ProductNotFoundException;
 import br.com.fight.stock.app.repository.categories.CategoriesRepository;
 import br.com.fight.stock.app.repository.products.ProductsRepository;
-import br.com.fight.stock.app.service.CategoryService;
+import br.com.fight.stock.app.service.category.CategoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

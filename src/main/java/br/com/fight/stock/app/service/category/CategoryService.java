@@ -1,4 +1,4 @@
-package br.com.fight.stock.app.service;
+package br.com.fight.stock.app.service.category;
 
 import br.com.fight.stock.app.controller.categories.dto.request.CategoriesRequest;
 import br.com.fight.stock.app.domain.Category;

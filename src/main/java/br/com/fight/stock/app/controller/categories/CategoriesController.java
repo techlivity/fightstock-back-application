@@ -2,9 +2,8 @@ package br.com.fight.stock.app.controller.categories;
 
 import br.com.fight.stock.app.controller.categories.dto.request.CategoriesRequest;
 import br.com.fight.stock.app.domain.Category;
-import br.com.fight.stock.app.service.CategoryService;
+import br.com.fight.stock.app.service.category.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

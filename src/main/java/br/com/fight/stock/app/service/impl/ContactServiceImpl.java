@@ -6,8 +6,8 @@ import br.com.fight.stock.app.exceptions.ContactNotFoundException;
 import br.com.fight.stock.app.exceptions.ErrorCallApiException;
 import br.com.fight.stock.app.exceptions.ExcessContactException;
 import br.com.fight.stock.app.repository.contact.ContactRepository;
-import br.com.fight.stock.app.service.ContactService;
-import br.com.fight.stock.app.service.ViaCepService;
+import br.com.fight.stock.app.service.contact.ContactService;
+import br.com.fight.stock.app.service.cep.ViaCepService;
 import org.springframework.stereotype.Service;
 
 import static br.com.fight.stock.app.utils.ApiUtils.formatMessage;
