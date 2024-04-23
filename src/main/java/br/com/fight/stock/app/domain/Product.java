@@ -11,6 +11,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static br.com.fight.stock.app.utils.ApiUtils.convertInstantToLocalDateTime;
 
@@ -74,7 +78,14 @@ public class Product {
         return product;
     }
 
+
     public static ProductResponse convertProductToProductResponse(Product product) {
+
+        List<String> descriptons = new ArrayList<>();
+        for (String description : product.getDescription().split(";")) {
+            descriptons.add(description.trim());
+        }
+
         return new ProductResponse(
                 product.getId(),
                 product.getFiled(),
@@ -83,7 +94,7 @@ public class Product {
                 convertInstantToLocalDateTime(product.getLastUpdatedOn()),
                 product.getName(),
                 product.getImage(),
-                product.getDescription(),
+                descriptons,
                 product.getFeatured(),
                 product.getPromotion());
     }

@@ -72,7 +72,7 @@ public class ProductController {
     @PreAuthorize("hasRole('USER_ADMIN')")
     @Operation(summary = "Remove um produto", security = { @SecurityRequirement(name = "basicScheme") })
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok().body(productService.deleteProduct(id));
+        return ResponseEntity.ok().body(productService.archiveProduct(id));
     }
 
     @PatchMapping("{productId}")

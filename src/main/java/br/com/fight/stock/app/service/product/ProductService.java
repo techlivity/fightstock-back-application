@@ -11,7 +11,7 @@ import java.util.List;
 public interface ProductService {
 
     Product updateProduct(Long id, ProductRequest productRequest);
-    String deleteProduct(Long id);
+    String archiveProduct(Long id);
     List<ProductResponse> getProductWithDate(Integer day, Integer month, Integer year);
     List<Product> getProductWithSpecification(Boolean published, Boolean featured, Boolean promotion);
     String insertImage(Long id, MultipartFile file) throws IOException;
