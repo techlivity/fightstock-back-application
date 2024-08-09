@@ -55,6 +55,6 @@ public class AuthController {
     public ResponseEntity<br.com.fight.stock.app.domain.User> getUserWithParam(@RequestParam(name = "email", required = false) String email,
                                                                                @RequestParam(name = "id", required = false) Long id,
                                                                                @RequestParam(name = "name", required = false) String name) {
-        return ResponseEntity.badRequest().body(userService.getUser(id, name, email));
+        return ResponseEntity.ok().body(userService.getUser(id, name, email));
     }
 }
