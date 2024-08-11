@@ -3,6 +3,7 @@ package br.com.fight.stock.app.service.impl;
 import br.com.fight.stock.app.controller.authentication.dto.AuthenticationDTO;
 import br.com.fight.stock.app.controller.authentication.dto.request.UserRequest;
 import br.com.fight.stock.app.domain.Image;
+import br.com.fight.stock.app.domain.Role;
 import br.com.fight.stock.app.domain.User;
 import br.com.fight.stock.app.exceptions.NotFoundUserException;
 import br.com.fight.stock.app.repository.image.ImageRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static br.com.fight.stock.app.utils.ApiUtils.validatePassword;
 
@@ -58,6 +60,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String register(UserRequest userRequest) {
+        if (userRequest.getRoles().isEmpty()) {
+            userRequest.setRoles(List.of(new Role(1, "USER")));
+        }
         if (Boolean.TRUE.equals(userRepository.existsByEmail(userRequest.getEmail()))) {
             return "Username is already taken!";
         }

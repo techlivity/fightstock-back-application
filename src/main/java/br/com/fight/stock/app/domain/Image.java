@@ -1,5 +1,6 @@
 package br.com.fight.stock.app.domain;
 
+import br.com.fight.stock.app.exceptions.ImageNotCompatibilityException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,11 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -53,21 +53,28 @@ public class Image implements Serializable {
         this.extension = extension;
     }
 
-    public static Image createImage(MultipartFile file) throws IOException {
-        ByteArrayInputStream bis = new ByteArrayInputStream(file.getBytes());
-        BufferedImage imageBuffered = ImageIO.read(bis);
+    public static Image createImage(MultipartFile file) {
+        BufferedImage imageBuffered = null;
+        String imageBase64 = null;
+        try {
+            imageBuffered = ImageIO.read(file.getInputStream());
+            imageBase64 = Base64.getEncoder()
+                    .encodeToString(file.getBytes());
+        } catch (Exception err) {
+            throw new ImageNotCompatibilityException("Erro ao ler dados de imagem, incompativel");
+        }
         String fileName = file.getOriginalFilename();
         String name = "";
         String extension = "";
-        if(fileName != null) {
+
+        if (fileName != null) {
             int lastDotIndex = fileName.lastIndexOf(".");
             name = fileName.substring(0, lastDotIndex);
             extension = fileName.substring(lastDotIndex + 1);
         }
         return new Image(name,
-                imageBuffered.getHeight(),
-                imageBuffered.getWidth(),
-                Base64.getEncoder()
-                        .encodeToString(file.getBytes()), extension);
+                Optional.of(imageBuffered.getHeight()).orElseGet(() -> 0),
+                Optional.of(imageBuffered.getWidth()).orElseGet(() -> 0),
+                imageBase64, extension);
     }
 }
