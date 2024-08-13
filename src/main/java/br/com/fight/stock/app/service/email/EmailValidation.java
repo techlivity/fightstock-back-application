@@ -27,7 +27,7 @@ public class EmailValidation {
 
     public void sendEmail(String to, String name) throws IOException {
 
-        Email from = new Email(environment.getProperty("MAIN_ORGANIZATION_MAIL"));
+        Email from = new Email(System.getProperty("MAIN_ORGANIZATION_MAIL"));
         String subject = "Verifique seu e-mail";
         Email toEmail = new Email(to);
         Content content = new Content("text/html", "descricao");
@@ -46,8 +46,8 @@ public class EmailValidation {
         }
 
         mail.addPersonalization(personalization);
-        mail.setTemplateId(environment.getProperty("SEND_GRID_TEMPLATE_ID"));
-        SendGrid sg = new SendGrid(environment.getProperty("SEND_GRID_API_KEY"));
+        mail.setTemplateId(System.getProperty("SEND_GRID_TEMPLATE_ID"));
+        SendGrid sg = new SendGrid(System.getProperty("SEND_GRID_API_KEY"));
         Request request = new Request();
         request.setMethod(Method.POST);
         request.setEndpoint("mail/send");
