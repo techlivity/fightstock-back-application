@@ -21,6 +21,8 @@ ext {
 }
 
 dependencies {
+	implementation 'com.sendgrid:sendgrid-java:4.10.1'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//lib para abstrair boilerplates
 	implementation 'org.projectlombok:lombok:1.18.20'

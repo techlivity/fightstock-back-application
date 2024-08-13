@@ -8,6 +8,7 @@ import br.com.fight.stock.app.domain.User;
 import br.com.fight.stock.app.exceptions.NotFoundUserException;
 import br.com.fight.stock.app.repository.image.ImageRepository;
 import br.com.fight.stock.app.repository.user.UserRepository;
+import br.com.fight.stock.app.service.email.EmailValidation;
 import br.com.fight.stock.app.service.user.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,11 +31,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ImageRepository imageRepository;
-    public UserServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder, ImageRepository imageRepository) {
+    private final EmailValidation emailValidation;
+    public UserServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder, ImageRepository imageRepository, EmailValidation emailValidation) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.imageRepository = imageRepository;
+        this.emailValidation = emailValidation;
     }
 
     @Override
@@ -64,12 +67,16 @@ public class UserServiceImpl implements UserService {
             userRequest.setRoles(List.of(new Role(1, "USER")));
         }
         if (Boolean.TRUE.equals(userRepository.existsByEmail(userRequest.getEmail()))) {
-            return "Username is already taken!";
+            return "Email em uso!";
         }
         userRequest.setPassword(passwordEncoder.encode(validatePassword(userRequest.getPassword())));
-
+        try {
+            emailValidation.sendEmail(userRequest.getEmail(), userRequest.getName());
+        }catch (IOException ioException) {
+            throw new RuntimeException("Erro ao validar o e-mail para concluir cadastro, insira um e-mail valido");
+        }
         userRepository.save(new User(userRequest.getEmail(), userRequest.getName(), userRequest.getPassword(), userRequest.getRoles()));
-        return "User registered successfully";
+        return "Usuario cadastrado com sucesso!";
     }
 
     @Override
