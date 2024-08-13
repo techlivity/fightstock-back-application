@@ -2,11 +2,13 @@ package br.com.fight.stock.app.service.email;
 
 import com.sendgrid.Method;
 import com.sendgrid.Request;
+import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,7 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class EmailValidation {
 
@@ -52,7 +55,8 @@ public class EmailValidation {
         request.setMethod(Method.POST);
         request.setEndpoint("mail/send");
         request.setBody(mail.build());
-        sg.api(request);
+        Response api = sg.api(request);
+        log.info("status code send grid api: {}", api.getStatusCode());
     }
 
     private String generateCode() {
